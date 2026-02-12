@@ -14,7 +14,7 @@
       "cflags_cc": [ "-std=c++14" ],
       "defines": [ 
         "NAPI_DISABLE_CPP_EXCEPTIONS",
-        "LINK_PLATFORM_MACOSX=1",
+        "LINK_PLATFORM_LINUX=1",
         "ASIO_STANDALONE=1"
       ],
       "conditions": [
