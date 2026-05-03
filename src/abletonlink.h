@@ -32,7 +32,8 @@ private:
     Napi::Value IsStartStopSyncEnabled(const Napi::CallbackInfo& info);
     void ForceBeatAtTime(const Napi::CallbackInfo& info);
     Napi::Value GetTimeForBeat(const Napi::CallbackInfo& info);
-    
+    Napi::Value GetState(const Napi::CallbackInfo& info);
+
     // Quantized launch methods
     void RequestBeatAtTime(const Napi::CallbackInfo& info);
     void RequestBeatAtStartPlayingTime(const Napi::CallbackInfo& info);

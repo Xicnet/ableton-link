@@ -27,6 +27,7 @@ Napi::Object AbletonLinkWrapper::Init(Napi::Env env, Napi::Object exports) {
         InstanceMethod("setNumPeersCallback", &AbletonLinkWrapper::SetNumPeersCallback),
         InstanceMethod("setTempoCallback", &AbletonLinkWrapper::SetTempoCallback),
         InstanceMethod("setStartStopCallback", &AbletonLinkWrapper::SetStartStopCallback),
+        InstanceMethod("getState", &AbletonLinkWrapper::GetState),
     });
 
     constructor = Napi::Persistent(func);
@@ -389,6 +390,27 @@ void AbletonLinkWrapper::handleStartStopCallback(bool isPlaying) {
             callback.Call({Napi::Boolean::New(env, isPlaying)});
         });
     }
+}
+
+Napi::Value AbletonLinkWrapper::GetState(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    if (info.Length() < 1 || !info[0].IsNumber()) {
+        Napi::TypeError::New(env, "Quantum (number) expected").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    double quantum = info[0].As<Napi::Number>().DoubleValue();
+
+    auto sessionState = link_->captureAppSessionState();
+    auto time = getCurrentTime();
+
+    Napi::Object result = Napi::Object::New(env);
+    result.Set("beat", sessionState.beatAtTime(time, quantum));
+    result.Set("phase", sessionState.phaseAtTime(time, quantum));
+    result.Set("tempo", sessionState.tempo());
+    result.Set("isPlaying", sessionState.isPlaying());
+    return result;
 }
 
 // Module initialization

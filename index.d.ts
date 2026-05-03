@@ -143,6 +143,15 @@ export declare class AbletonLink {
    * @returns Time in seconds when transport state will change
    */
   timeForIsPlaying(): number;
+
+  /**
+   * Get beat, phase, tempo, and isPlaying from a single session state snapshot.
+   * Uses the provided quantum for beatAtTime and phaseAtTime, ensuring
+   * fmod(beat, quantum) === phase (the Link SDK invariant).
+   * @param quantum The quantum (e.g. 4 for one bar in 4/4)
+   * @returns Snapshot of session state
+   */
+  getState(quantum: number): { beat: number; phase: number; tempo: number; isPlaying: boolean };
 }
 
 /**
