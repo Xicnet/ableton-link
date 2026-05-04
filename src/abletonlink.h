@@ -48,6 +48,7 @@ private:
     void SetStartStopCallback(const Napi::CallbackInfo& info);
     
     // Utility functions
+    Napi::Value GetCurrentTime(const Napi::CallbackInfo& info);
     std::chrono::microseconds getCurrentTime() const;
     
     // Callback handling

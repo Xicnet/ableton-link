@@ -28,6 +28,7 @@ Napi::Object AbletonLinkWrapper::Init(Napi::Env env, Napi::Object exports) {
         InstanceMethod("setTempoCallback", &AbletonLinkWrapper::SetTempoCallback),
         InstanceMethod("setStartStopCallback", &AbletonLinkWrapper::SetStartStopCallback),
         InstanceMethod("getState", &AbletonLinkWrapper::GetState),
+        InstanceMethod("getCurrentTime", &AbletonLinkWrapper::GetCurrentTime),
     });
 
     constructor = Napi::Persistent(func);
@@ -204,6 +205,12 @@ Napi::Value AbletonLinkWrapper::GetTimeForBeat(const Napi::CallbackInfo& info) {
 
 std::chrono::microseconds AbletonLinkWrapper::getCurrentTime() const {
     return link_->clock().micros();
+}
+
+Napi::Value AbletonLinkWrapper::GetCurrentTime(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    double timeInSeconds = static_cast<double>(getCurrentTime().count()) / 1000000.0;
+    return Napi::Number::New(env, timeInSeconds);
 }
 
 // Quantized launch methods
