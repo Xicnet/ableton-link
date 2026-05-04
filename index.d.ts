@@ -145,6 +145,12 @@ export declare class AbletonLink {
   timeForIsPlaying(): number;
 
   /**
+   * Get the current Link clock time in seconds
+   * @returns Current time in seconds (Link clock)
+   */
+  getCurrentTime(): number;
+
+  /**
    * Get beat, phase, tempo, and isPlaying from a single session state snapshot.
    * Uses the provided quantum for beatAtTime and phaseAtTime, ensuring
    * fmod(beat, quantum) === phase (the Link SDK invariant).
