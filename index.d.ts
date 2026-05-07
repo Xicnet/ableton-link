@@ -157,7 +157,13 @@ export declare class AbletonLink {
    * @param quantum The quantum (e.g. 4 for one bar in 4/4)
    * @returns Snapshot of session state
    */
-  getState(quantum: number): { beat: number; phase: number; tempo: number; isPlaying: boolean };
+  getState(quantum: number): {
+    beat: number;
+    phase: number;
+    tempo: number;
+    isPlaying: boolean;
+    timeAtBeat: number;
+  };
 }
 
 /**

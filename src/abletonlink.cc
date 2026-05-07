@@ -412,11 +412,16 @@ Napi::Value AbletonLinkWrapper::GetState(const Napi::CallbackInfo& info) {
     auto sessionState = link_->captureAppSessionState();
     auto time = getCurrentTime();
 
+    double beat = sessionState.beatAtTime(time, quantum);
+    auto timeAtBeatMicros = sessionState.timeAtBeat(beat, quantum);
+    double timeAtBeatSeconds = static_cast<double>(timeAtBeatMicros.count()) / 1000000.0;
+
     Napi::Object result = Napi::Object::New(env);
-    result.Set("beat", sessionState.beatAtTime(time, quantum));
+    result.Set("beat", beat);
     result.Set("phase", sessionState.phaseAtTime(time, quantum));
     result.Set("tempo", sessionState.tempo());
     result.Set("isPlaying", sessionState.isPlaying());
+    result.Set("timeAtBeat", timeAtBeatSeconds);
     return result;
 }
 
