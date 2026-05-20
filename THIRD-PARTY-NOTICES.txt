@@ -1,0 +1,38 @@
+THIRD-PARTY NOTICES — @xicnet/abletonlink
+
+This package is licensed GPL-2.0-or-later (see LICENSE). It links and
+distributes Ableton Link, which is GPLv2+. The distributed/combined work is
+therefore GPLv2+.
+
+Components and their origins:
+
+1. Ableton Link (directory: link/)
+   Copyright (c) Ableton AG.
+   Licensed GPLv2+ (or commercial). See link/LICENSE.md and
+   link/GNU-GPL-v2.0.md for the verbatim terms and the
+   link-devs@ableton.com commercial-license contact.
+
+2. Node.js binding layer (index.js, index.d.ts, binding.gyp, src/)
+   Derives from the @ktamas77/abletonlink package by Tamas Kalman. That
+   upstream declared the MIT License solely via its npm package metadata
+   ("license": "MIT"); it shipped no LICENSE file and no copyright notice in
+   its source. We credit Tamas Kalman's authorship here, and — since no
+   upstream notice text existed to carry forward — reproduce the standard MIT
+   License terms below in good faith as the terms the upstream declared. MIT
+   is GPL-compatible, so this binding layer is incorporated into the present
+   GPLv2+ work; the combined work is GPLv2+.
+
+   Standard MIT License terms (good-faith reproduction; upstream author:
+   Tamas Kalman):
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the "Software"),
+   to deal in the Software without restriction, including without limitation
+   the rights to use, copy, modify, merge, publish, distribute, sublicense,
+   and/or sell copies of the Software, and to permit persons to whom the
+   Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+3. Modifications by XicNET
+   Copyright (c) 2026 XicNET. Licensed GPL-2.0-or-later.
