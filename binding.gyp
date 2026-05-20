@@ -12,9 +12,8 @@
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
       "cflags_cc": [ "-std=c++14" ],
-      "defines": [ 
+      "defines": [
         "NAPI_DISABLE_CPP_EXCEPTIONS",
-        "LINK_PLATFORM_LINUX=1",
         "ASIO_STANDALONE=1"
       ],
       "conditions": [
