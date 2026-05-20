@@ -48,7 +48,9 @@ private:
     void SetStartStopCallback(const Napi::CallbackInfo& info);
     
     // Utility functions
-    Napi::Value GetCurrentTime(const Napi::CallbackInfo& info);
+    // NB: not named GetCurrentTime — <windows.h> #defines GetCurrentTime to
+    // GetTickCount, which breaks the method name on Windows builds.
+    Napi::Value GetCurrentTimeMicros(const Napi::CallbackInfo& info);
     std::chrono::microseconds getCurrentTime() const;
     
     // Callback handling
