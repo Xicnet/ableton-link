@@ -89,9 +89,21 @@ void AbletonLinkWrapper::SetTempo(const Napi::CallbackInfo& info) {
     }
 
     double tempo = info[0].As<Napi::Number>().DoubleValue();
-    
+
+    // Optional second arg: hostTimeAtOutput in SECONDS (Link clock domain, i.e.
+    // clock().micros()/1e6). When provided, the tempo change takes effect at that
+    // instant (shared across peers) — the Link-correct setTempo(bpm, atTime) contract.
+    // Omitted => current time (back-compat; existing callers unchanged).
+    std::chrono::microseconds atTime;
+    if (info.Length() >= 2 && info[1].IsNumber()) {
+        double sec = info[1].As<Napi::Number>().DoubleValue();
+        atTime = std::chrono::microseconds(static_cast<long long>(sec * 1000000.0));
+    } else {
+        atTime = getCurrentTime();
+    }
+
     auto sessionState = link_->captureAppSessionState();
-    sessionState.setTempo(tempo, getCurrentTime());
+    sessionState.setTempo(tempo, atTime);
     link_->commitAppSessionState(sessionState);
 }
 

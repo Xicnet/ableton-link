@@ -27,10 +27,12 @@ export declare class AbletonLink {
   getTempo(): number;
 
   /**
-   * Set a new tempo
+   * Set a new tempo.
    * @param bpm New tempo in beats per minute
+   * @param atTimeSeconds Optional hostTimeAtOutput (Link clock seconds, = getCurrentTime() domain)
+   *                       at which the change takes effect. Omitted => current time.
    */
-  setTempo(bpm: number): void;
+  setTempo(bpm: number, atTimeSeconds?: number): void;
 
   /**
    * Get the current beat position
