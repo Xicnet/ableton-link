@@ -58,6 +58,45 @@ describe('AbletonLink', () => {
     expect(link.isPlaying()).toBe(false);
   });
 
+  test('setIsPlaying(playing, atTimeSeconds) commits the transition at that time', () => {
+    const at = link.getCurrentTime() + 2.5;
+
+    link.setIsPlaying(true, at);
+    expect(link.isPlaying()).toBe(true);
+    expect(Math.abs(link.timeForIsPlaying() - at)).toBeLessThan(1e-5);
+
+    link.setIsPlaying(false, at + 1);
+    expect(link.isPlaying()).toBe(false);
+    expect(Math.abs(link.timeForIsPlaying() - (at + 1))).toBeLessThan(1e-5);
+  });
+
+  test('setIsPlaying without a time commits at the current time (unchanged)', () => {
+    const before = link.getCurrentTime();
+    link.setIsPlaying(true);
+    const after = link.getCurrentTime();
+    const t = link.timeForIsPlaying();
+    expect(t).toBeGreaterThanOrEqual(before - 1e-5);
+    expect(t).toBeLessThanOrEqual(after + 1e-5);
+
+    link.setIsPlaying(false, undefined);
+    expect(link.timeForIsPlaying()).toBeGreaterThanOrEqual(after - 1e-5);
+  });
+
+  test('setIsPlaying refuses a non-finite or non-numeric time and leaves the state alone', () => {
+    const at = link.getCurrentTime() + 2.5;
+    link.setIsPlaying(true, at);
+
+    // Matched by message: the addon's errors are built in the native realm, so their
+    // constructors are not Jest's RangeError / TypeError.
+    expect(() => link.setIsPlaying(false, NaN)).toThrow(/finite number of Link clock seconds/);
+    expect(() => link.setIsPlaying(false, Infinity)).toThrow(/finite number of Link clock seconds/);
+    expect(() => link.setIsPlaying(false, '1')).toThrow(
+      /Time \(number, Link clock seconds\) expected/
+    );
+    expect(link.isPlaying()).toBe(true);
+    expect(Math.abs(link.timeForIsPlaying() - at)).toBeLessThan(1e-5);
+  });
+
   test('should enable start/stop sync', () => {
     expect(link.isStartStopSyncEnabled()).toBe(false);
 

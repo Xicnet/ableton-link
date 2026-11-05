@@ -56,8 +56,11 @@ export declare class AbletonLink {
   /**
    * Set the playing state
    * @param playing Whether transport should be playing
+   * @param atTimeSeconds Optional time of the transition (Link clock seconds, = getCurrentTime()
+   *                      domain, as setTempo's atTime). Omitted => current time. A present value
+   *                      that is not a finite number throws.
    */
-  setIsPlaying(playing: boolean): void;
+  setIsPlaying(playing: boolean, atTimeSeconds?: number): void;
 
   /**
    * Check if transport is currently playing

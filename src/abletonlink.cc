@@ -1,5 +1,6 @@
 #include "abletonlink.h"
 #include <chrono>
+#include <cmath>
 
 Napi::FunctionReference AbletonLinkWrapper::constructor;
 
@@ -146,9 +147,32 @@ void AbletonLinkWrapper::SetIsPlaying(const Napi::CallbackInfo& info) {
     }
 
     bool isPlaying = info[0].As<Napi::Boolean>().Value();
-    
+
+    // Optional second arg: the transition's time in SECONDS (Link clock domain,
+    // clock().micros()/1e6, the same domain as setTempo's atTime). When provided,
+    // the start/stop takes effect at that instant (Link's setIsPlaying(bool, time)
+    // contract: a client commits its start at the bar it arms, not at receipt).
+    // Omitted (or undefined) => current time, the original behaviour, unchanged.
+    // A present argument that is not a finite number is refused: a NaN or an
+    // Infinity cast to microseconds would commit a garbage transition time.
+    std::chrono::microseconds atTime;
+    if (info.Length() >= 2 && !info[1].IsUndefined()) {
+        if (!info[1].IsNumber()) {
+            Napi::TypeError::New(env, "Time (number, Link clock seconds) expected").ThrowAsJavaScriptException();
+            return;
+        }
+        double sec = info[1].As<Napi::Number>().DoubleValue();
+        if (!std::isfinite(sec)) {
+            Napi::RangeError::New(env, "Time must be a finite number of Link clock seconds").ThrowAsJavaScriptException();
+            return;
+        }
+        atTime = std::chrono::microseconds(static_cast<long long>(sec * 1000000.0));
+    } else {
+        atTime = getCurrentTime();
+    }
+
     auto sessionState = link_->captureAppSessionState();
-    sessionState.setIsPlaying(isPlaying, getCurrentTime());
+    sessionState.setIsPlaying(isPlaying, atTime);
     link_->commitAppSessionState(sessionState);
 }
 
